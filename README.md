@@ -15,3 +15,4 @@ Workout planning and tracking application built using Agile methodologies, Jira,
 - Exercise library
 - Workout logging
 - Progress tracking
+Initial setup for FitTrack project
