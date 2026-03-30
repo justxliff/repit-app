@@ -1,0 +1,351 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #1a1a1a;
+  border-bottom: 1px solid #2a2a2a;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+}
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ff5722;
+  letter-spacing: -0.5px;
+}
+
+.nav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: #888;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+}
+
+.nav-btn:hover {
+  background: #2a2a2a;
+  color: #f0f0f0;
+}
+
+.nav-btn.active {
+  background: #ff5722;
+  color: white;
+  font-weight: 600;
+}
+
+.main {
+  flex: 1;
+  padding: 2rem 1.5rem;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.page-subtitle {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.page-header .page-subtitle {
+  margin-bottom: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ff5722;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: #888;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.workout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.workout-card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.15s;
+}
+
+.workout-card:hover {
+  border-color: #444;
+}
+
+.workout-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+}
+
+.workout-meta {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.workout-exercises {
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+.workout-duration {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ff5722;
+  text-align: right;
+  min-width: 60px;
+}
+
+.workout-duration span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #888;
+}
+
+.exercises-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.exercise-card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.exercise-card:hover {
+  border-color: #ff5722;
+  transform: translateY(-2px);
+}
+
+.exercise-category {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ff5722;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.exercise-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.exercise-muscles {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.btn-primary {
+  background: #ff5722;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover {
+  background: #e64a19;
+}
+
+.btn-secondary {
+  background: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid #3a3a3a;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-secondary:hover {
+  background: #333;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 1rem;
+}
+
+.modal {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input {
+  width: 100%;
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #f0f0f0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-group input:focus {
+  border-color: #ff5722;
+}
+
+.exercise-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.exercise-chip {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  color: #aaa;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.exercise-chip:hover {
+  border-color: #ff5722;
+  color: #f0f0f0;
+}
+
+.exercise-chip.selected {
+  background: #ff5722;
+  border-color: #ff5722;
+  color: white;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
