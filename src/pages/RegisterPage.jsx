@@ -35,6 +35,18 @@ const PROVIDERS = [
   },
 ]
 
+function getFirebaseErrorMessage(code) {
+  switch (code) {
+    case 'auth/email-already-in-use': return 'An account with this email already exists.'
+    case 'auth/invalid-email': return 'Please enter a valid email address.'
+    case 'auth/weak-password': return 'Password must be at least 6 characters.'
+    case 'auth/popup-closed-by-user': return 'Sign-in popup was closed. Please try again.'
+    case 'auth/account-exists-with-different-credential': return 'An account already exists with a different sign-in method.'
+    case 'auth/popup-blocked': return 'Popup was blocked by your browser. Please allow popups and try again.'
+    default: return 'Registration failed. Please try again.'
+  }
+}
+
 export default function RegisterPage() {
   const { registerWithEmail, registerWithProvider } = useAuth()
 
@@ -43,24 +55,32 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loadingProvider, setLoadingProvider] = useState(null)
+  const [emailLoading, setEmailLoading] = useState(false)
 
-  function handleEmailSubmit(e) {
+  async function handleEmailSubmit(e) {
     e.preventDefault()
     setError('')
+    setEmailLoading(true)
     try {
-      registerWithEmail(email, password)
+      await registerWithEmail(email, password)
     } catch (err) {
-      setError(err.message)
+      setError(err.code ? getFirebaseErrorMessage(err.code) : err.message)
+    } finally {
+      setEmailLoading(false)
     }
   }
 
   async function handleProviderClick(providerId) {
+    if (providerId === 'Apple') {
+      setError('Apple sign-in is not yet configured. Please use Google, Facebook, or Email.')
+      return
+    }
     setError('')
     setLoadingProvider(providerId)
     try {
       await registerWithProvider(providerId)
     } catch (err) {
-      setError(err.message)
+      setError(err.code ? getFirebaseErrorMessage(err.code) : err.message)
       setLoadingProvider(null)
     }
   }
@@ -124,6 +144,7 @@ export default function RegisterPage() {
                 onChange={e => setEmail(e.target.value)}
                 autoComplete="email"
                 autoFocus
+                disabled={emailLoading}
               />
             </div>
             <div className="form-field">
@@ -131,17 +152,21 @@ export default function RegisterPage() {
               <input
                 id="password"
                 type="password"
-                placeholder="Create a password"
+                placeholder="At least 6 characters"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 autoComplete="new-password"
+                disabled={emailLoading}
               />
             </div>
-            <button type="submit" className="btn-register-email">Create Account</button>
+            <button type="submit" className="btn-register-email" disabled={emailLoading}>
+              {emailLoading ? 'Creating account…' : 'Create Account'}
+            </button>
             <button
               type="button"
               className="btn-back"
               onClick={() => { setView('options'); setError('') }}
+              disabled={emailLoading}
             >
               ← Back to options
             </button>

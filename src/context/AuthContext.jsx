@@ -1,54 +1,73 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import {
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from 'firebase/auth'
+import { auth } from '../firebase'
 
 const AuthContext = createContext(null)
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-const PROVIDER_MOCK_USERS = {
-  Google: {
-    name: 'Google User',
-    profilePicture: 'https://lh3.googleusercontent.com/a/default-user=s96-c',
-    provider: 'Google',
-  },
-  Apple: {
-    name: 'Apple User',
-    profilePicture: null,
-    provider: 'Apple',
-  },
-  Facebook: {
-    name: 'Facebook User',
-    profilePicture: 'https://graph.facebook.com/me/picture?type=normal',
-    provider: 'Facebook',
-  },
+function normalizeUser(firebaseUser) {
+  return {
+    name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User',
+    email: firebaseUser.email,
+    profilePicture: firebaseUser.photoURL,
+    provider: firebaseUser.providerData?.[0]?.providerId || 'unknown',
+  }
 }
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, firebaseUser => {
+      setUser(firebaseUser ? normalizeUser(firebaseUser) : null)
+      setLoading(false)
+    })
+    return unsubscribe
+  }, [])
 
   function registerWithEmail(email, password) {
-    if (!email || !password) {
-      throw new Error('Email and password are required.')
-    }
-    if (!EMAIL_REGEX.test(email)) {
-      throw new Error('Please enter a valid email address.')
-    }
-    setUser({
-      name: email.split('@')[0],
-      email,
-      profilePicture: null,
-      provider: 'Email',
-    })
+    if (!email || !password) throw new Error('Email and password are required.')
+    if (!EMAIL_REGEX.test(email)) throw new Error('Please enter a valid email address.')
+    return createUserWithEmailAndPassword(auth, email, password)
   }
 
   async function registerWithProvider(provider) {
-    await new Promise(resolve => setTimeout(resolve, 1200))
-    const mockUser = PROVIDER_MOCK_USERS[provider]
-    if (!mockUser) throw new Error(`Unknown provider: ${provider}`)
-    setUser({ ...mockUser, email: null })
+    const providerMap = {
+      Google: new GoogleAuthProvider(),
+      Facebook: new FacebookAuthProvider(),
+    }
+    const authProvider = providerMap[provider]
+    if (!authProvider) throw new Error(`Provider "${provider}" is not supported.`)
+    return signInWithPopup(auth, authProvider)
   }
 
   function logout() {
-    setUser(null)
+    return signOut(auth)
+  }
+
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#0f0f0f',
+        color: '#888',
+        fontSize: '1rem',
+      }}>
+        Loading…
+      </div>
+    )
   }
 
   return (
