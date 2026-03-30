@@ -17,3 +17,11 @@ Rational: I want the project to be as seamless and integrated as possible
 Rationale:
 Short sprint cycles allow for rapid iteration and testing of AI-generated features while maintaining flexibility for unexpected issues.
 
+## Sprint Planning Update (3/30)
+- I decided to update the Srint length to 3 business days
+
+## Ticket Status (3/30)
+- User Story: Review -> In Progress Refinement -> Ready for Dev -> In Development -> Ready Internal Test -> Pending Main Build -> Merged to Main -> Done
+
+
+
