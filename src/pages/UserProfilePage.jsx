@@ -6,10 +6,32 @@ import WorkoutPreferencesSection from '../components/profile/WorkoutPreferencesS
 import PersonalRecordsSection from '../components/profile/PersonalRecordsSection'
 import './UserProfilePage.css'
 
+const ICON_PROPS = { viewBox: '0 0 24 24', fill: 'none', stroke: '#ff5722', strokeWidth: '1.5', strokeLinecap: 'round', strokeLinejoin: 'round' }
+
+const ICONS = {
+  demographic: (
+    <svg {...ICON_PROPS}>
+      <circle cx="12" cy="7" r="4" />
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+    </svg>
+  ),
+  preferences: (
+    <svg {...ICON_PROPS}>
+      <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+    </svg>
+  ),
+  personalRecords: (
+    <svg {...ICON_PROPS}>
+      <path d="M8 21h8M12 17v4" />
+      <path d="M5 3h14v6c0 3.9-3.1 7-7 7s-7-3.1-7-7V3z" />
+      <path d="M5 6H2v1c0 2.2 1.3 4 3 4.5M19 6h3v1c0 2.2-1.3 4-3 4.5" />
+    </svg>
+  ),
+}
+
 const TILES = [
   {
     id: 'demographic',
-    icon: '👤',
     label: 'Demographic Info',
     summary: (profile) => {
       const d = profile.demographic
@@ -22,7 +44,6 @@ const TILES = [
   },
   {
     id: 'preferences',
-    icon: '⚡',
     label: 'Workout Preferences',
     summary: (profile) => {
       const p = profile.preferences
@@ -35,7 +56,6 @@ const TILES = [
   },
   {
     id: 'personalRecords',
-    icon: '🏆',
     label: 'Personal Records',
     summary: (profile) => {
       const count = profile.personalRecords?.length || 0
@@ -84,7 +104,7 @@ export default function UserProfilePage({ onNavigate }) {
               onClick={() => setActiveSection(tile.id)}
             >
               <span className="tile-label">{tile.label}</span>
-              <span className="tile-icon">{tile.icon}</span>
+              <span className="tile-icon">{ICONS[tile.id]}</span>
               <span className="tile-summary">{tile.summary(profile)}</span>
             </button>
           ))}

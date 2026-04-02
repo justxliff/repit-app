@@ -91,12 +91,16 @@
 }
 
 .tile-icon {
-  font-size: 2rem;
-  line-height: 1;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.tile-icon svg {
+  width: 33%;
+  aspect-ratio: 1;
+  height: auto;
 }
 
 .tile-label {
