@@ -1,0 +1,125 @@
+.verify-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: #0f0f0f;
+}
+
+.verify-card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.verify-icon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.verify-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.verify-body {
+  color: #888;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.verify-body strong {
+  color: #f0f0f0;
+  font-weight: 600;
+}
+
+.verify-notice {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.verify-notice.success {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #34d399;
+}
+
+.verify-notice.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.btn-check {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: #ff5722;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 0.25rem;
+}
+
+.btn-check:hover:not(:disabled) {
+  background: #e64a19;
+}
+
+.btn-check:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-resend {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #aaa;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-resend:hover:not(:disabled) {
+  border-color: #ff5722;
+  color: #ff5722;
+}
+
+.btn-resend:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-signout-verify {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.15s;
+}
+
+.btn-signout-verify:hover {
+  color: #888;
+}

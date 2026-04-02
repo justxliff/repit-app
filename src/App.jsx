@@ -1,4 +1,8 @@
 import React, { useState } from 'react'
+import { useAuth } from './context/AuthContext'
+import RegisterPage from './pages/RegisterPage'
+import UserProfilePage from './pages/UserProfilePage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 import './App.css'
 
 const EXERCISES = [
@@ -19,16 +23,25 @@ const SAMPLE_WORKOUTS = [
 ]
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard')
+  const { user } = useAuth()
+  const [activeTab, setActiveTab] = useState('profile')
   const [workouts, setWorkouts] = useState(SAMPLE_WORKOUTS)
   const [showAddWorkout, setShowAddWorkout] = useState(false)
   const [newWorkout, setNewWorkout] = useState({ name: '', duration: '', exercises: [] })
+
+  if (!user) {
+    return <RegisterPage />
+  }
+
+  if (user.provider === 'password' && !user.emailVerified) {
+    return <VerifyEmailPage />
+  }
 
   const totalWorkouts = workouts.length
   const totalMinutes = workouts.reduce((sum, w) => sum + w.duration, 0)
   const thisWeek = workouts.filter(w => {
     const d = new Date(w.date)
-    const now = new Date('2026-03-26')
+    const now = new Date()
     const diff = (now - d) / (1000 * 60 * 60 * 24)
     return diff <= 7
   }).length
@@ -65,7 +78,7 @@ export default function App() {
             <span className="logo-text">RepIt</span>
           </div>
           <nav className="nav">
-            {['dashboard', 'workouts', 'exercises'].map(tab => (
+            {['profile', 'dashboard', 'workouts', 'exercises'].map(tab => (
               <button
                 key={tab}
                 className={`nav-btn ${activeTab === tab ? 'active' : ''}`}
@@ -79,10 +92,14 @@ export default function App() {
       </header>
 
       <main className="main">
+        {activeTab === 'profile' && (
+          <UserProfilePage onNavigate={setActiveTab} />
+        )}
+
         {activeTab === 'dashboard' && (
           <div className="page">
             <h1 className="page-title">Dashboard</h1>
-            <p className="page-subtitle">Welcome back! Keep pushing.</p>
+            <p className="page-subtitle">Welcome back, {user.name}! Keep pushing.</p>
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-value">{totalWorkouts}</div>
