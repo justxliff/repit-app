@@ -4,8 +4,10 @@ import {
   FacebookAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   onAuthStateChanged,
   signOut,
+  reload,
 } from 'firebase/auth'
 import { auth } from '../firebase'
 
@@ -19,6 +21,7 @@ function normalizeUser(firebaseUser) {
     email: firebaseUser.email,
     profilePicture: firebaseUser.photoURL,
     provider: firebaseUser.providerData?.[0]?.providerId || 'unknown',
+    emailVerified: firebaseUser.emailVerified,
   }
 }
 
@@ -34,10 +37,12 @@ export function AuthProvider({ children }) {
     return unsubscribe
   }, [])
 
-  function registerWithEmail(email, password) {
+  async function registerWithEmail(email, password) {
     if (!email || !password) throw new Error('Email and password are required.')
     if (!EMAIL_REGEX.test(email)) throw new Error('Please enter a valid email address.')
-    return createUserWithEmailAndPassword(auth, email, password)
+    const result = await createUserWithEmailAndPassword(auth, email, password)
+    await sendEmailVerification(result.user)
+    return result
   }
 
   async function registerWithProvider(provider) {
@@ -48,6 +53,19 @@ export function AuthProvider({ children }) {
     const authProvider = providerMap[provider]
     if (!authProvider) throw new Error(`Provider "${provider}" is not supported.`)
     return signInWithPopup(auth, authProvider)
+  }
+
+  async function resendVerificationEmail() {
+    const currentUser = auth.currentUser
+    if (currentUser) await sendEmailVerification(currentUser)
+  }
+
+  async function refreshUser() {
+    const currentUser = auth.currentUser
+    if (currentUser) {
+      await reload(currentUser)
+      setUser(normalizeUser(currentUser))
+    }
   }
 
   function logout() {
@@ -71,7 +89,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, registerWithEmail, registerWithProvider, logout }}>
+    <AuthContext.Provider value={{ user, registerWithEmail, registerWithProvider, resendVerificationEmail, refreshUser, logout }}>
       {children}
     </AuthContext.Provider>
   )

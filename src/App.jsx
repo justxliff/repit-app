@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAuth } from './context/AuthContext'
 import RegisterPage from './pages/RegisterPage'
 import UserProfilePage from './pages/UserProfilePage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 import './App.css'
 
 const EXERCISES = [
@@ -30,6 +31,10 @@ export default function App() {
 
   if (!user) {
     return <RegisterPage />
+  }
+
+  if (user.provider === 'password' && !user.emailVerified) {
+    return <VerifyEmailPage />
   }
 
   const totalWorkouts = workouts.length
