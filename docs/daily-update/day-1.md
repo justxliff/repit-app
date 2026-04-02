@@ -1,0 +1,8 @@
+# Day 1 
+Today is the inception of my idea I had while working at the YMCA as a wellness coach. The idea was to launch a personal a project that can show my skills as a Product Owner and Product Manager, and therfore RepIt was born. The idea is an app that you can create workouts, log them as you're training, and keep track of progress and see your workout plan. I told the idea to a friend of mine who is a trainer named Khamal, so I took a mix of his ideas and my ideas to create this product. Khamal will act as the client for this Product, where I'll get feedback from him on the various requirments, functions, interface and update the tickets accordingly if needed. 
+
+---
+Today I am setting up my workflow for the delivery of this app. I have created a personal Jira Account and created a space to house the tracking of the Features and User stories for this project. As the Project Manager for RepIt, I will be. using Agile methodologies to track and deliver the features of the product. The development of the app will be handled by an AI tool called Replit, that will take the specifications from my user stories and features to build the apps software. This will be stored in my personal GitHub, where all the updates and changes can be tracked and for visibility of project goals and timelines
+
+---
+The goal for today is to setup my overall delivery plan and have that in Jira, so work on the app can begin as soon as possible
