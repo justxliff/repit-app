@@ -83,12 +83,9 @@ export default function UserProfilePage({ onNavigate }) {
               className="profile-tile"
               onClick={() => setActiveSection(tile.id)}
             >
+              <span className="tile-label">{tile.label}</span>
               <span className="tile-icon">{tile.icon}</span>
-              <div className="tile-text">
-                <span className="tile-label">{tile.label}</span>
-                <span className="tile-summary">{tile.summary(profile)}</span>
-              </div>
-              <span className="tile-chevron">›</span>
+              <span className="tile-summary">{tile.summary(profile)}</span>
             </button>
           ))}
         </div>
