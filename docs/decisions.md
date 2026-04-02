@@ -9,7 +9,7 @@ Rational: I want the project to be as seamless and integrated as possible
 
 ## Sprint Planning Approach (3-26)
 
-- Sprint length: 2 days  
+- Sprint length: 1 week 
 - Capacity: 8 story points  
 - Planned work: 6 points  
 - Unplanned buffer: 2 points  
