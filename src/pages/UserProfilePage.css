@@ -62,43 +62,112 @@
   padding: 0.2rem 0.75rem;
 }
 
-/* Section nav tabs */
-.profile-section-nav {
+/* Tiles */
+.profile-tiles {
   display: flex;
-  gap: 0;
-  border-bottom: 1px solid #2a2a2a;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.section-nav-btn {
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: #666;
-  font-size: 0.88rem;
-  font-weight: 500;
-  padding: 0.6rem 0.9rem;
+.profile-tile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  text-align: left;
+  width: 100%;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.profile-tile:hover {
+  border-color: #ff5722;
+  background: #1f1f1f;
+}
+
+.tile-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.tile-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+
+.tile-summary {
+  font-size: 0.82rem;
+  color: #666;
   white-space: nowrap;
-  margin-bottom: -1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.section-nav-btn:hover {
-  color: #aaa;
+.tile-chevron {
+  font-size: 1.5rem;
+  color: #444;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
-.section-nav-btn.active {
-  color: #ff5722;
-  border-bottom-color: #ff5722;
-}
-
-/* Section body */
+/* Section body (drill-in) */
 .profile-section-body {
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   border-radius: 14px;
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.btn-back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: #ff5722;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s;
+}
+
+.btn-back:hover {
+  opacity: 0.75;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.section-header-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.section-header-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin: 0;
 }
 
 /* Shared section content */

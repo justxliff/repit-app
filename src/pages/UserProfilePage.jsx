@@ -6,10 +6,42 @@ import WorkoutPreferencesSection from '../components/profile/WorkoutPreferencesS
 import PersonalRecordsSection from '../components/profile/PersonalRecordsSection'
 import './UserProfilePage.css'
 
-const SECTIONS = [
-  { id: 'demographic', label: 'Demographic Info' },
-  { id: 'preferences', label: 'Workout Preferences' },
-  { id: 'personalRecords', label: 'Personal Records' },
+const TILES = [
+  {
+    id: 'demographic',
+    icon: '👤',
+    label: 'Demographic Info',
+    summary: (profile) => {
+      const d = profile.demographic
+      const parts = []
+      if (d.name) parts.push(d.name)
+      if (d.age) parts.push(`Age ${d.age}`)
+      if (d.weight) parts.push(`${d.weight} ${d.weightUnit}`)
+      return parts.length ? parts.join(' · ') : 'Not set up yet'
+    },
+  },
+  {
+    id: 'preferences',
+    icon: '⚡',
+    label: 'Workout Preferences',
+    summary: (profile) => {
+      const p = profile.preferences
+      const parts = []
+      if (p.goal) parts.push(p.goal)
+      if (p.experienceLevel) parts.push(p.experienceLevel)
+      if (p.preferredDays?.length) parts.push(`${p.preferredDays.length} days/wk`)
+      return parts.length ? parts.join(' · ') : 'Not set up yet'
+    },
+  },
+  {
+    id: 'personalRecords',
+    icon: '🏆',
+    label: 'Personal Records',
+    summary: (profile) => {
+      const count = profile.personalRecords?.length || 0
+      return count === 0 ? 'No records yet' : `${count} record${count !== 1 ? 's' : ''} saved`
+    },
+  },
 ]
 
 function Avatar({ authUser, demographicPicture }) {
@@ -25,11 +57,12 @@ function Avatar({ authUser, demographicPicture }) {
 export default function UserProfilePage({ onNavigate }) {
   const { user, logout } = useAuth()
   const { profile, saveSection } = useProfileData(user?.email)
-  const [activeSection, setActiveSection] = useState('demographic')
+  const [activeSection, setActiveSection] = useState(null)
 
   if (!user) return null
 
   const displayName = profile.demographic.name || user.name
+  const activeTile = TILES.find(t => t.id === activeSection)
 
   return (
     <div className="profile-page">
@@ -42,39 +75,54 @@ export default function UserProfilePage({ onNavigate }) {
         </span>
       </div>
 
-      <div className="profile-section-nav">
-        {SECTIONS.map(s => (
-          <button
-            key={s.id}
-            className={`section-nav-btn ${activeSection === s.id ? 'active' : ''}`}
-            onClick={() => setActiveSection(s.id)}
-          >
-            {s.label}
+      {!activeSection ? (
+        <div className="profile-tiles">
+          {TILES.map(tile => (
+            <button
+              key={tile.id}
+              className="profile-tile"
+              onClick={() => setActiveSection(tile.id)}
+            >
+              <span className="tile-icon">{tile.icon}</span>
+              <div className="tile-text">
+                <span className="tile-label">{tile.label}</span>
+                <span className="tile-summary">{tile.summary(profile)}</span>
+              </div>
+              <span className="tile-chevron">›</span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="profile-section-body">
+          <button className="btn-back" onClick={() => setActiveSection(null)}>
+            ‹ Back
           </button>
-        ))}
-      </div>
+          <div className="section-header">
+            <span className="section-header-icon">{activeTile.icon}</span>
+            <h2 className="section-header-label">{activeTile.label}</h2>
+          </div>
 
-      <div className="profile-section-body">
-        {activeSection === 'demographic' && (
-          <DemographicSection
-            data={profile.demographic}
-            authUser={user}
-            onSave={data => saveSection('demographic', data)}
-          />
-        )}
-        {activeSection === 'preferences' && (
-          <WorkoutPreferencesSection
-            data={profile.preferences}
-            onSave={data => saveSection('preferences', data)}
-          />
-        )}
-        {activeSection === 'personalRecords' && (
-          <PersonalRecordsSection
-            data={profile.personalRecords}
-            onSave={data => saveSection('personalRecords', data)}
-          />
-        )}
-      </div>
+          {activeSection === 'demographic' && (
+            <DemographicSection
+              data={profile.demographic}
+              authUser={user}
+              onSave={data => saveSection('demographic', data)}
+            />
+          )}
+          {activeSection === 'preferences' && (
+            <WorkoutPreferencesSection
+              data={profile.preferences}
+              onSave={data => saveSection('preferences', data)}
+            />
+          )}
+          {activeSection === 'personalRecords' && (
+            <PersonalRecordsSection
+              data={profile.personalRecords}
+              onSave={data => saveSection('personalRecords', data)}
+            />
+          )}
+        </div>
+      )}
 
       <div className="profile-footer-actions">
         <button className="btn-go-dashboard" onClick={() => onNavigate('dashboard')}>
