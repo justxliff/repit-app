@@ -20,29 +20,29 @@
 
 .profile-avatar-wrap {
   position: relative;
-  width: 88px;
-  height: 88px;
+  width: 132px;
+  height: 132px;
   flex-shrink: 0;
 }
 
 .profile-avatar {
-  width: 88px;
-  height: 88px;
+  width: 132px;
+  height: 132px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ff5722;
 }
 
 .profile-avatar-placeholder {
-  width: 88px;
-  height: 88px;
+  width: 132px;
+  height: 132px;
   border-radius: 50%;
   background: #2a2a2a;
   border: 2px solid #ff5722;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.75rem;
+  font-size: 2.6rem;
   font-weight: 700;
   color: #ff5722;
 }
@@ -64,7 +64,7 @@
 }
 
 .profile-name {
-  font-size: 1.4rem;
+  font-size: 2.1rem;
   font-weight: 700;
   color: #f0f0f0;
   margin: 0;
