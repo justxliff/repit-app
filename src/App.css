@@ -1,3 +1,7 @@
+*, *::before, *::after {
+  font-family: 'Poppins', sans-serif;
+}
+
 .app {
   min-height: 100vh;
   display: flex;

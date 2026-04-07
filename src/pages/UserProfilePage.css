@@ -73,7 +73,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 0.4rem;
   flex: 1;
   aspect-ratio: 1;
   background: #1a1a1a;
@@ -91,7 +92,6 @@
 }
 
 .tile-icon {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
