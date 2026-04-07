@@ -104,14 +104,14 @@
 }
 
 .tile-label {
-  font-size: 0.8rem;
+  font-size: 1.12rem;
   font-weight: 600;
   color: #f0f0f0;
   width: 100%;
 }
 
 .tile-summary {
-  font-size: 0.7rem;
+  font-size: 0.98rem;
   color: #666;
   overflow: hidden;
   display: -webkit-box;
