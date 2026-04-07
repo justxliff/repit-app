@@ -64,20 +64,57 @@ const TILES = [
   },
 ]
 
-function Avatar({ authUser, demographicPicture }) {
+function resizeImage(file, maxSize = 400) {
+  return new Promise(resolve => {
+    const img = new Image()
+    const url = URL.createObjectURL(file)
+    img.onload = () => {
+      const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
+      const canvas = document.createElement('canvas')
+      canvas.width = img.width * scale
+      canvas.height = img.height * scale
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+      URL.revokeObjectURL(url)
+      resolve(canvas.toDataURL('image/jpeg', 0.85))
+    }
+    img.src = url
+  })
+}
+
+function Avatar({ authUser, demographicPicture, onImageChange }) {
+  const inputRef = React.useRef(null)
   const picture = demographicPicture || authUser?.profilePicture
-  if (picture) {
-    return (
-      <div className="profile-avatar-wrap">
-        <img className="profile-avatar" src={picture} alt="Profile" onError={e => { e.target.style.display = 'none' }} />
-      </div>
-    )
+
+  async function handleFile(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    const resized = await resizeImage(file)
+    onImageChange(resized)
+    e.target.value = ''
   }
-  const name = authUser?.name || ''
-  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
+
+  const overlay = (
+    <div className="avatar-edit-overlay" onClick={() => inputRef.current?.click()}>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      Edit
+    </div>
+  )
+
   return (
-    <div className="profile-avatar-wrap">
-      <div className="profile-avatar-placeholder">{initials}</div>
+    <div className="profile-avatar-wrap" onClick={() => inputRef.current?.click()}>
+      <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
+      {picture
+        ? <img className="profile-avatar" src={picture} alt="Profile" onError={e => { e.target.style.display = 'none' }} />
+        : (() => {
+            const name = authUser?.name || ''
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
+            return <div className="profile-avatar-placeholder">{initials}</div>
+          })()
+      }
+      {overlay}
     </div>
   )
 }
@@ -95,7 +132,11 @@ export default function UserProfilePage({ onNavigate }) {
   return (
     <div className="profile-page">
       <div className="profile-hero">
-        <Avatar authUser={user} demographicPicture={profile.demographic.profilePicture} />
+        <Avatar
+          authUser={user}
+          demographicPicture={profile.demographic.profilePicture}
+          onImageChange={pic => saveSection('demographic', { ...profile.demographic, profilePicture: pic })}
+        />
         <h1 className="profile-name">{displayName}</h1>
         {user.email && <p className="profile-email">{user.email}</p>}
       </div>
