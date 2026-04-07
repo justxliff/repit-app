@@ -64,32 +64,20 @@ const TILES = [
   },
 ]
 
-const PROVIDER_BADGE = {
-  'password':     { label: '✉', bg: '#ff5722', color: '#fff' },
-  'google.com':   { label: 'G', bg: '#fff',     color: '#4285F4' },
-  'facebook.com': { label: 'f', bg: '#1877F2',  color: '#fff' },
-}
-
 function Avatar({ authUser, demographicPicture }) {
   const picture = demographicPicture || authUser?.profilePicture
-  const badge = PROVIDER_BADGE[authUser?.provider] || null
-
-  const avatarEl = picture
-    ? <img className="profile-avatar" src={picture} alt="Profile" onError={e => { e.target.style.display = 'none' }} />
-    : (() => {
-        const name = authUser?.name || ''
-        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
-        return <div className="profile-avatar-placeholder">{initials}</div>
-      })()
-
+  if (picture) {
+    return (
+      <div className="profile-avatar-wrap">
+        <img className="profile-avatar" src={picture} alt="Profile" onError={e => { e.target.style.display = 'none' }} />
+      </div>
+    )
+  }
+  const name = authUser?.name || ''
+  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
   return (
     <div className="profile-avatar-wrap">
-      {avatarEl}
-      {badge && (
-        <span className="provider-bubble" style={{ background: badge.bg, color: badge.color }}>
-          {badge.label}
-        </span>
-      )}
+      <div className="profile-avatar-placeholder">{initials}</div>
     </div>
   )
 }
