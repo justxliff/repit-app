@@ -98,20 +98,20 @@
 }
 
 .tile-icon svg {
-  width: 2.5rem;
-  height: 2.5rem;
-  flex-shrink: 0;
+  width: 33%;
+  aspect-ratio: 1;
+  height: auto;
 }
 
 .tile-label {
-  font-size: 1.12rem;
+  font-size: 1.04rem;
   font-weight: 600;
   color: #f0f0f0;
   width: 100%;
 }
 
 .tile-summary {
-  font-size: 0.98rem;
+  font-size: 0.91rem;
   color: #666;
   overflow: hidden;
   display: -webkit-box;
