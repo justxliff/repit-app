@@ -83,7 +83,7 @@ function Avatar({ authUser, demographicPicture }) {
 }
 
 export default function UserProfilePage({ onNavigate }) {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const { profile, saveSection } = useProfileData(user?.email)
   const [activeSection, setActiveSection] = useState(null)
 
@@ -149,9 +149,6 @@ export default function UserProfilePage({ onNavigate }) {
       <div className="profile-footer-actions">
         <button className="btn-go-dashboard" onClick={() => onNavigate('dashboard')}>
           Go to Dashboard
-        </button>
-        <button className="btn-logout" onClick={logout}>
-          Sign Out
         </button>
       </div>
     </div>
