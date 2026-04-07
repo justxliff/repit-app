@@ -91,7 +91,10 @@ export default function UserProfilePage({ onNavigate }) {
         <h1 className="profile-name">{displayName}</h1>
         {user.email && <p className="profile-email">{user.email}</p>}
         <span className="profile-provider-badge">
-          {user.provider === 'password' ? '✉ Email' : `Connected via ${user.provider}`}
+          {user.provider === 'password' ? '✉ Email'
+            : user.provider === 'google.com' ? 'Google'
+            : user.provider === 'facebook.com' ? 'Facebook'
+            : user.provider}
         </span>
       </div>
 
