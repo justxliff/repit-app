@@ -247,3 +247,23 @@
 .btn-back:hover {
   color: #f0f0f0;
 }
+
+@media (max-width: 640px) {
+  .register-page {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 3rem;
+  }
+
+  .register-card {
+    padding: 2rem 1.25rem;
+  }
+
+  .register-title {
+    font-size: 1.3rem;
+  }
+
+  .form-field input {
+    font-size: 1rem;
+  }
+}

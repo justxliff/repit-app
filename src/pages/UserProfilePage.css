@@ -647,3 +647,122 @@
 .btn-go-dashboard:hover {
   background: #e64a19;
 }
+
+/* ── Mobile responsive ── */
+@media (max-width: 640px) {
+
+  .profile-hero {
+    padding: 1.25rem 0.75rem 1rem;
+    gap: 0.4rem;
+  }
+
+  .profile-avatar-wrap {
+    width: 26%;
+  }
+
+  .profile-avatar-placeholder {
+    font-size: 2.2rem;
+  }
+
+  .profile-name {
+    font-size: 1.6rem;
+  }
+
+  .profile-email {
+    font-size: 0.78rem;
+  }
+
+  /* Tiles */
+  .profile-tiles {
+    gap: 0.35rem;
+    padding: 0.85rem 0;
+  }
+
+  .profile-tile {
+    padding: 0.6rem 0.3rem;
+    gap: 0.25rem;
+    border-radius: 24%;
+  }
+
+  .tile-icon svg {
+    width: 38%;
+  }
+
+  .tile-label {
+    font-size: 0.7rem;
+  }
+
+  .tile-summary {
+    font-size: 0.62rem;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Section drill-in */
+  .section-header-label {
+    font-size: 1.05rem;
+  }
+
+  /* Section view rows — stack label above value */
+  .section-field-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .section-field-value {
+    text-align: left;
+    font-size: 0.88rem;
+  }
+
+  /* Forms — 16px prevents iOS auto-zoom */
+  .form-input,
+  .form-select,
+  .form-select-sm {
+    font-size: 1rem;
+  }
+
+  /* Photo upload buttons — side by side */
+  .profile-pic-upload {
+    flex-wrap: wrap;
+  }
+
+  .profile-pic-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .btn-pic-option {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.7rem;
+  }
+
+  /* PR rows */
+  .pr-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .pr-actions {
+    align-self: flex-end;
+  }
+
+  /* Rep type toggle */
+  .rep-type-btn {
+    font-size: 0.82rem;
+    padding: 0.4rem 0;
+  }
+
+  /* Pref option buttons */
+  .pref-option-btn {
+    font-size: 0.82rem;
+    padding: 0.45rem 0.8rem;
+  }
+
+  /* Footer */
+  .profile-footer-actions {
+    padding: 1rem 0 0.5rem;
+  }
+}
