@@ -453,6 +453,37 @@
   border-color: #555;
 }
 
+/* Preference option buttons */
+.pref-option-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pref-option-btn {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #888;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.pref-option-btn:hover {
+  border-color: #ff5722;
+  color: #ccc;
+}
+
+.pref-option-active {
+  background: rgba(255, 87, 34, 0.12);
+  border-color: #ff5722;
+  color: #ff5722;
+}
+
 /* Rep type toggle */
 .rep-type-toggle {
   display: flex;

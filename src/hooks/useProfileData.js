@@ -10,9 +10,7 @@ const DEFAULT = {
   },
   preferences: {
     goal: '',
-    experienceLevel: '',
-    preferredDays: [],
-    sessionDuration: '',
+    focus: '',
   },
   personalRecords: [],
 }

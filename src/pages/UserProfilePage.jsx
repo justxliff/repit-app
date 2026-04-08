@@ -49,8 +49,7 @@ const TILES = [
       const p = profile.preferences
       const parts = []
       if (p.goal) parts.push(p.goal)
-      if (p.experienceLevel) parts.push(p.experienceLevel)
-      if (p.preferredDays?.length) parts.push(`${p.preferredDays.length} days/wk`)
+      if (p.focus) parts.push(p.focus)
       return parts.length ? parts.join(' · ') : 'Not set up yet'
     },
   },

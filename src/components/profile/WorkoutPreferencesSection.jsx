@@ -1,29 +1,29 @@
 import React, { useState } from 'react'
 
-const GOALS = ['Lose Weight', 'Build Muscle', 'Improve Endurance', 'Increase Strength', 'Stay Active']
-const LEVELS = ['Beginner', 'Intermediate', 'Advanced']
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-const DURATIONS = ['30 min', '45 min', '60 min', '75 min', '90+ min']
+const GOALS = ['Weight Loss', 'Body Toning', 'Muscle Gain', 'Flexibility']
+const FOCUSES = ['Strength', 'Endurance', 'Explosion']
 
 export default function WorkoutPreferencesSection({ data, onSave }) {
   const [editing, setEditing] = useState(false)
   const [form, setForm] = useState(data)
+  const [errors, setErrors] = useState({})
 
   function handleCancel() {
     setForm(data)
+    setErrors({})
     setEditing(false)
   }
 
-  function toggleDay(day) {
-    setForm(f => ({
-      ...f,
-      preferredDays: f.preferredDays.includes(day)
-        ? f.preferredDays.filter(d => d !== day)
-        : [...f.preferredDays, day],
-    }))
+  function validate() {
+    const errs = {}
+    if (!form.goal) errs.goal = 'Workout goal is required.'
+    if (!form.focus) errs.focus = 'Focus is required.'
+    return errs
   }
 
   function handleSave() {
+    const errs = validate()
+    if (Object.keys(errs).length) { setErrors(errs); return }
     onSave(form)
     setEditing(false)
   }
@@ -37,19 +37,11 @@ export default function WorkoutPreferencesSection({ data, onSave }) {
             <span className="section-field-value">{data.goal || '—'}</span>
           </div>
           <div className="section-field-row">
-            <span className="section-field-label">Experience</span>
-            <span className="section-field-value">{data.experienceLevel || '—'}</span>
-          </div>
-          <div className="section-field-row">
-            <span className="section-field-label">Preferred Days</span>
-            <span className="section-field-value">{data.preferredDays?.length ? data.preferredDays.join(', ') : '—'}</span>
-          </div>
-          <div className="section-field-row">
-            <span className="section-field-label">Session Length</span>
-            <span className="section-field-value">{data.sessionDuration || '—'}</span>
+            <span className="section-field-label">Focus</span>
+            <span className="section-field-value">{data.focus || '—'}</span>
           </div>
         </div>
-        <button className="btn-edit-section" onClick={() => { setForm(data); setEditing(true) }}>Edit</button>
+        <button className="btn-edit-section" onClick={() => { setForm(data); setErrors({}); setEditing(true) }}>Edit</button>
       </div>
     )
   }
@@ -57,43 +49,37 @@ export default function WorkoutPreferencesSection({ data, onSave }) {
   return (
     <div className="section-edit">
       <div className="form-field">
-        <label className="form-label">Goal</label>
-        <select className="form-select" value={form.goal} onChange={e => setForm(f => ({ ...f, goal: e.target.value }))}>
-          <option value="">Select a goal</option>
-          {GOALS.map(g => <option key={g} value={g}>{g}</option>)}
-        </select>
-      </div>
-
-      <div className="form-field">
-        <label className="form-label">Experience Level</label>
-        <select className="form-select" value={form.experienceLevel} onChange={e => setForm(f => ({ ...f, experienceLevel: e.target.value }))}>
-          <option value="">Select level</option>
-          {LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
-        </select>
-      </div>
-
-      <div className="form-field">
-        <label className="form-label">Preferred Days</label>
-        <div className="day-picker">
-          {DAYS.map(day => (
+        <label className="form-label">Workout Goal *</label>
+        <div className="pref-option-group">
+          {GOALS.map(g => (
             <button
-              key={day}
+              key={g}
               type="button"
-              className={`day-btn ${form.preferredDays.includes(day) ? 'day-btn-active' : ''}`}
-              onClick={() => toggleDay(day)}
+              className={`pref-option-btn ${form.goal === g ? 'pref-option-active' : ''}`}
+              onClick={() => setForm(f => ({ ...f, goal: g }))}
             >
-              {day}
+              {g}
             </button>
           ))}
         </div>
+        {errors.goal && <span className="field-error">{errors.goal}</span>}
       </div>
 
       <div className="form-field">
-        <label className="form-label">Session Duration</label>
-        <select className="form-select" value={form.sessionDuration} onChange={e => setForm(f => ({ ...f, sessionDuration: e.target.value }))}>
-          <option value="">Select duration</option>
-          {DURATIONS.map(d => <option key={d} value={d}>{d}</option>)}
-        </select>
+        <label className="form-label">Focus *</label>
+        <div className="pref-option-group">
+          {FOCUSES.map(fc => (
+            <button
+              key={fc}
+              type="button"
+              className={`pref-option-btn ${form.focus === fc ? 'pref-option-active' : ''}`}
+              onClick={() => setForm(f => ({ ...f, focus: fc }))}
+            >
+              {fc}
+            </button>
+          ))}
+        </div>
+        {errors.focus && <span className="field-error">{errors.focus}</span>}
       </div>
 
       <div className="section-edit-actions">
