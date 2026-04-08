@@ -453,6 +453,39 @@
   border-color: #555;
 }
 
+/* Rep type toggle */
+.rep-type-toggle {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.rep-type-btn {
+  flex: 1;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.rep-type-active {
+  background: rgba(255, 87, 34, 0.12);
+  border-color: #ff5722;
+  color: #ff5722;
+}
+
+.pr-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 /* Personal Records */
 .pr-list {
   display: flex;
@@ -486,6 +519,24 @@
   font-size: 0.85rem;
   color: #ff5722;
   font-weight: 600;
+}
+
+.pr-date {
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.pr-progress {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.pr-progress-up {
+  color: #4ade80;
+}
+
+.pr-progress-down {
+  color: #f87171;
 }
 
 .pr-actions {
