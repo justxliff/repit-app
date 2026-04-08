@@ -5,6 +5,54 @@ import UserProfilePage from './pages/UserProfilePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
 import './App.css'
 
+const NAV_TABS = [
+  {
+    id: 'profile',
+    label: 'Profile',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+      </svg>
+    ),
+  },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+    ),
+  },
+  {
+    id: 'workouts',
+    label: 'Workouts',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 4v16M18 4v16M3 8h4M17 8h4M3 16h4M17 16h4" />
+      </svg>
+    ),
+  },
+  {
+    id: 'exercises',
+    label: 'Exercises',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="8" y1="6" x2="21" y2="6" />
+        <line x1="8" y1="12" x2="21" y2="12" />
+        <line x1="8" y1="18" x2="21" y2="18" />
+        <circle cx="3" cy="6" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="3" cy="12" r="1.5" fill="currentColor" stroke="none" />
+        <circle cx="3" cy="18" r="1.5" fill="currentColor" stroke="none" />
+      </svg>
+    ),
+  },
+]
+
 const EXERCISES = [
   { id: 1, name: 'Push-ups', category: 'Chest', muscles: 'Chest, Triceps, Shoulders' },
   { id: 2, name: 'Pull-ups', category: 'Back', muscles: 'Lats, Biceps' },
@@ -78,13 +126,15 @@ export default function App() {
             <span className="logo-text">RepIt</span>
           </div>
           <nav className="nav">
-            {['profile', 'dashboard', 'workouts', 'exercises'].map(tab => (
+            {NAV_TABS.map(tab => (
               <button
-                key={tab}
-                className={`nav-btn ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab)}
+                key={tab.id}
+                className={`nav-btn ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+                title={tab.label}
+                aria-label={tab.label}
               >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {tab.icon}
               </button>
             ))}
           </nav>
