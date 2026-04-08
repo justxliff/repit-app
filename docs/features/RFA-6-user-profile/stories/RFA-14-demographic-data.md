@@ -15,7 +15,7 @@ I will be satisfied when:
    - Name can be entered manually by the user
    - Name can be automatically populated from a linked third-party account:
    -  - Google Account
-      - Apple Account
+      - Apple Account (this has been delayed until R2)
       - Facebook Account
 - - Age is an optional field
   - - Age can be entered as an integer value by the user
