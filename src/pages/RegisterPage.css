@@ -151,6 +151,32 @@
   cursor: not-allowed;
 }
 
+.email-mode-toggle {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.email-mode-btn {
+  flex: 1;
+  background: #242424;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #888;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.email-mode-active {
+  background: rgba(255, 87, 34, 0.12);
+  border-color: #ff5722;
+  color: #ff5722;
+}
+
 .email-form {
   display: flex;
   flex-direction: column;

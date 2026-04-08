@@ -4,6 +4,7 @@ import {
   FacebookAuthProvider,
   signInWithPopup,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   sendEmailVerification,
   onAuthStateChanged,
   signOut,
@@ -43,6 +44,12 @@ export function AuthProvider({ children }) {
     const result = await createUserWithEmailAndPassword(auth, email, password)
     await sendEmailVerification(result.user)
     return result
+  }
+
+  async function loginWithEmail(email, password) {
+    if (!email || !password) throw new Error('Email and password are required.')
+    if (!EMAIL_REGEX.test(email)) throw new Error('Please enter a valid email address.')
+    return signInWithEmailAndPassword(auth, email, password)
   }
 
   async function registerWithProvider(provider) {
@@ -89,7 +96,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, registerWithEmail, registerWithProvider, resendVerificationEmail, refreshUser, logout }}>
+    <AuthContext.Provider value={{ user, registerWithEmail, loginWithEmail, registerWithProvider, resendVerificationEmail, refreshUser, logout }}>
       {children}
     </AuthContext.Provider>
   )

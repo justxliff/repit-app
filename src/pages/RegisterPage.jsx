@@ -26,36 +26,52 @@ const PROVIDERS = [
   },
 ]
 
-function getFirebaseErrorMessage(code) {
+function getErrorMessage(code, isLogin) {
   switch (code) {
-    case 'auth/email-already-in-use': return 'An account with this email already exists.'
+    case 'auth/email-already-in-use': return 'An account with this email already exists. Try signing in.'
     case 'auth/invalid-email': return 'Please enter a valid email address.'
     case 'auth/weak-password': return 'Password must be at least 6 characters.'
+    case 'auth/user-not-found': return 'No account found with this email.'
+    case 'auth/wrong-password': return 'Incorrect password. Please try again.'
+    case 'auth/invalid-credential': return 'Invalid email or password.'
+    case 'auth/too-many-requests': return 'Too many failed attempts. Please try again later.'
     case 'auth/popup-closed-by-user': return 'Sign-in popup was closed. Please try again.'
     case 'auth/account-exists-with-different-credential': return 'An account already exists with a different sign-in method.'
     case 'auth/popup-blocked': return 'Popup was blocked by your browser. Please allow popups and try again.'
-    default: return 'Registration failed. Please try again.'
+    default: return isLogin ? 'Sign in failed. Please try again.' : 'Registration failed. Please try again.'
   }
 }
 
 export default function RegisterPage() {
-  const { registerWithEmail, registerWithProvider } = useAuth()
+  const { registerWithEmail, loginWithEmail, registerWithProvider } = useAuth()
 
   const [view, setView] = useState('options')
+  const [emailMode, setEmailMode] = useState('register')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loadingProvider, setLoadingProvider] = useState(null)
   const [emailLoading, setEmailLoading] = useState(false)
 
+  function switchEmailMode(mode) {
+    setEmailMode(mode)
+    setError('')
+    setEmail('')
+    setPassword('')
+  }
+
   async function handleEmailSubmit(e) {
     e.preventDefault()
     setError('')
     setEmailLoading(true)
     try {
-      await registerWithEmail(email, password)
+      if (emailMode === 'register') {
+        await registerWithEmail(email, password)
+      } else {
+        await loginWithEmail(email, password)
+      }
     } catch (err) {
-      setError(err.code ? getFirebaseErrorMessage(err.code) : err.message)
+      setError(err.code ? getErrorMessage(err.code, emailMode === 'login') : err.message)
     } finally {
       setEmailLoading(false)
     }
@@ -67,7 +83,7 @@ export default function RegisterPage() {
     try {
       await registerWithProvider(providerId)
     } catch (err) {
-      setError(err.code ? getFirebaseErrorMessage(err.code) : err.message)
+      setError(err.code ? getErrorMessage(err.code, false) : err.message)
       setLoadingProvider(null)
     }
   }
@@ -79,8 +95,24 @@ export default function RegisterPage() {
           <span className="register-logo-icon">💪</span>
           <span className="register-logo-text">RepIt</span>
         </div>
-        <h1 className="register-title">Create your account</h1>
-        <p className="register-subtitle">Start tracking your workouts today</p>
+
+        {view === 'options' && (
+          <>
+            <h1 className="register-title">Welcome to RepIt</h1>
+            <p className="register-subtitle">Sign in or create your account</p>
+          </>
+        )}
+
+        {view === 'email' && (
+          <>
+            <h1 className="register-title">
+              {emailMode === 'register' ? 'Create your account' : 'Sign in'}
+            </h1>
+            <p className="register-subtitle">
+              {emailMode === 'register' ? 'Start tracking your workouts today' : 'Welcome back'}
+            </p>
+          </>
+        )}
 
         {error && (
           <div className="register-error" role="alert">
@@ -111,53 +143,75 @@ export default function RegisterPage() {
 
             <button
               className="btn-email-toggle"
-              onClick={() => { setView('email'); setError('') }}
+              onClick={() => { setView('email'); setEmailMode('register'); setError('') }}
               disabled={loadingProvider !== null}
             >
-              Register with Email
+              Continue with Email
             </button>
           </>
         )}
 
         {view === 'email' && (
-          <form className="email-form" onSubmit={handleEmailSubmit} noValidate>
-            <div className="form-field">
-              <label htmlFor="email">Email address</label>
-              <input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                autoComplete="email"
-                autoFocus
-                disabled={emailLoading}
-              />
+          <>
+            <div className="email-mode-toggle">
+              <button
+                type="button"
+                className={`email-mode-btn ${emailMode === 'register' ? 'email-mode-active' : ''}`}
+                onClick={() => switchEmailMode('register')}
+              >
+                Register
+              </button>
+              <button
+                type="button"
+                className={`email-mode-btn ${emailMode === 'login' ? 'email-mode-active' : ''}`}
+                onClick={() => switchEmailMode('login')}
+              >
+                Sign In
+              </button>
             </div>
-            <div className="form-field">
-              <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                placeholder="At least 6 characters"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                autoComplete="new-password"
+
+            <form className="email-form" onSubmit={handleEmailSubmit} noValidate>
+              <div className="form-field">
+                <label htmlFor="email">Email address</label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  autoComplete="email"
+                  autoFocus
+                  disabled={emailLoading}
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder={emailMode === 'register' ? 'At least 6 characters' : 'Your password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  autoComplete={emailMode === 'register' ? 'new-password' : 'current-password'}
+                  disabled={emailLoading}
+                />
+              </div>
+              <button type="submit" className="btn-register-email" disabled={emailLoading}>
+                {emailLoading
+                  ? emailMode === 'register' ? 'Creating account…' : 'Signing in…'
+                  : emailMode === 'register' ? 'Create Account' : 'Sign In'
+                }
+              </button>
+              <button
+                type="button"
+                className="btn-back"
+                onClick={() => { setView('options'); setError('') }}
                 disabled={emailLoading}
-              />
-            </div>
-            <button type="submit" className="btn-register-email" disabled={emailLoading}>
-              {emailLoading ? 'Creating account…' : 'Create Account'}
-            </button>
-            <button
-              type="button"
-              className="btn-back"
-              onClick={() => { setView('options'); setError('') }}
-              disabled={emailLoading}
-            >
-              ← Back to options
-            </button>
-          </form>
+              >
+                ← Back to options
+              </button>
+            </form>
+          </>
         )}
       </div>
     </div>
