@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext'
 import RegisterPage from './pages/RegisterPage'
 import UserProfilePage from './pages/UserProfilePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
+import WorkoutCreationPage from './pages/WorkoutCreationPage'
 import './App.css'
 
 const NAV_TABS = [
@@ -193,76 +194,7 @@ export default function App() {
         )}
 
         {activeTab === 'workouts' && (
-          <div className="page">
-            <div className="page-header">
-              <div>
-                <h1 className="page-title">Workouts</h1>
-                <p className="page-subtitle">Track and manage your sessions</p>
-              </div>
-              <button className="btn-primary" onClick={() => setShowAddWorkout(true)}>+ Add Workout</button>
-            </div>
-
-            {showAddWorkout && (
-              <div className="modal-overlay" onClick={() => setShowAddWorkout(false)}>
-                <div className="modal" onClick={e => e.stopPropagation()}>
-                  <h2 className="modal-title">New Workout</h2>
-                  <form onSubmit={handleAddWorkout}>
-                    <div className="form-group">
-                      <label>Workout Name</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Upper Body Day"
-                        value={newWorkout.name}
-                        onChange={e => setNewWorkout({ ...newWorkout, name: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Duration (minutes)</label>
-                      <input
-                        type="number"
-                        placeholder="e.g. 45"
-                        value={newWorkout.duration}
-                        onChange={e => setNewWorkout({ ...newWorkout, duration: e.target.value })}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Exercises</label>
-                      <div className="exercise-picker">
-                        {EXERCISES.map(ex => (
-                          <button
-                            key={ex.id}
-                            type="button"
-                            className={`exercise-chip ${newWorkout.exercises.includes(ex.name) ? 'selected' : ''}`}
-                            onClick={() => toggleExercise(ex.name)}
-                          >
-                            {ex.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="modal-actions">
-                      <button type="button" className="btn-secondary" onClick={() => setShowAddWorkout(false)}>Cancel</button>
-                      <button type="submit" className="btn-primary">Save Workout</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            )}
-
-            <div className="workout-list">
-              {workouts.map(w => (
-                <div key={w.id} className="workout-card">
-                  <div className="workout-info">
-                    <div className="workout-name">{w.name}</div>
-                    <div className="workout-meta">{w.date} &middot; {w.duration} min</div>
-                    <div className="workout-exercises">{w.exercises.join(', ') || 'No exercises logged'}</div>
-                  </div>
-                  <div className="workout-duration">{w.duration}<span>min</span></div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <WorkoutCreationPage workouts={[]} />
         )}
 
         {activeTab === 'exercises' && (
