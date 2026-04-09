@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import useExerciseLibrary from '../../hooks/useExerciseLibrary'
+import ExerciseCreatorForm from './ExerciseCreatorForm'
 import './WorkoutCreatorModal.css'
 
 const SECTIONS = [
@@ -23,16 +24,22 @@ const CloseIcon = ({ size = 20 }) => (
   </svg>
 )
 
-export default function WorkoutCreatorModal({ onClose, onSave }) {
-  const { exercises, addExercise } = useExerciseLibrary()
+const BackIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+)
 
-  const [workoutName, setWorkoutName]   = useState('')
-  const [sections, setSections]         = useState({ warmUp: [], workout: [], coolDown: [] })
-  const [showLibrary, setShowLibrary]   = useState(false)
-  const [libSearch, setLibSearch]       = useState('')
-  const [newEx, setNewEx]               = useState({ show: false, name: '', category: '' })
-  const [errors, setErrors]             = useState({})
-  const [showReview, setShowReview]     = useState(false)
+export default function WorkoutCreatorModal({ onClose, onSave }) {
+  const { exercises, addExercise, nameExists } = useExerciseLibrary()
+
+  const [workoutName, setWorkoutName] = useState('')
+  const [sections, setSections]       = useState({ warmUp: [], workout: [], coolDown: [] })
+  const [showLibrary, setShowLibrary] = useState(false)
+  const [libView, setLibView]         = useState('list')
+  const [libSearch, setLibSearch]     = useState('')
+  const [errors, setErrors]           = useState({})
+  const [showReview, setShowReview]   = useState(false)
 
   const totalExercises = Object.values(sections).flat().length
 
@@ -67,25 +74,20 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
     return Object.keys(errs).length === 0
   }
 
-  const handleReview = () => {
-    if (validate()) setShowReview(true)
-  }
+  const handleReview = () => { if (validate()) setShowReview(true) }
+  const handleSave   = () => { onSave({ name: workoutName.trim(), sections }); onClose() }
 
-  const handleSave = () => {
-    onSave({ name: workoutName.trim(), sections })
-    onClose()
-  }
-
-  const handleCreateExercise = () => {
-    if (!newEx.name.trim()) return
-    addExercise({ name: newEx.name.trim(), category: newEx.category.trim() || 'Other' })
-    setNewEx({ show: false, name: '', category: '' })
+  const handleExerciseSaved = (exerciseData) => {
+    addExercise(exerciseData)
+    setLibView('list')
   }
 
   const filteredExercises = exercises.filter(ex =>
     ex.name.toLowerCase().includes(libSearch.toLowerCase()) ||
-    ex.category.toLowerCase().includes(libSearch.toLowerCase())
+    (ex.category || '').toLowerCase().includes(libSearch.toLowerCase())
   )
+
+  const closeLibrary = () => { setShowLibrary(false); setLibView('list'); setLibSearch('') }
 
   if (showReview) {
     return (
@@ -95,7 +97,6 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
             <h2 className="wcm-title">Review Workout</h2>
             <button className="wcm-close" onClick={() => setShowReview(false)} aria-label="Back"><CloseIcon /></button>
           </div>
-
           <div className="wcm-body">
             <div className="wcm-review-name">{workoutName}</div>
             {SECTIONS.map(sec => (
@@ -118,7 +119,6 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
               )
             ))}
           </div>
-
           <div className="wcm-footer">
             <button className="wcm-btn-secondary" onClick={() => setShowReview(false)}>Edit</button>
             <button className="wcm-btn-save" onClick={handleSave}>Save Workout</button>
@@ -226,67 +226,59 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
       </div>
 
       {showLibrary && (
-        <div className="wcm-lib-overlay" onClick={() => setShowLibrary(false)}>
+        <div className="wcm-lib-overlay" onClick={closeLibrary}>
           <div className="wcm-lib-panel" onClick={e => e.stopPropagation()}>
+
             <div className="wcm-lib-header">
-              <h3 className="wcm-lib-title">Exercise Library</h3>
-              <button className="wcm-close" onClick={() => setShowLibrary(false)} aria-label="Close library">
+              {libView === 'creator' ? (
+                <button className="wcm-lib-back" onClick={() => setLibView('list')}>
+                  <BackIcon /> Back
+                </button>
+              ) : null}
+              <h3 className="wcm-lib-title">
+                {libView === 'creator' ? 'New Exercise' : 'Exercise Library'}
+              </h3>
+              <button className="wcm-close" onClick={closeLibrary} aria-label="Close library">
                 <CloseIcon size={18} />
               </button>
             </div>
 
-            <input
-              className="wcm-lib-search"
-              placeholder="Search by name or category..."
-              value={libSearch}
-              onChange={e => setLibSearch(e.target.value)}
-            />
-
-            <div className="wcm-lib-list">
-              {filteredExercises.map(ex => (
-                <div key={ex.id} className="wcm-lib-item">
-                  <div className="wcm-lib-info">
-                    <span className="wcm-lib-name">{ex.name}</span>
-                    <span className="wcm-lib-cat">{ex.category}</span>
-                  </div>
-                </div>
-              ))}
-              {filteredExercises.length === 0 && (
-                <div className="wcm-lib-empty">No exercises found</div>
-              )}
-            </div>
-
-            {newEx.show ? (
-              <div className="wcm-new-ex-form">
+            {libView === 'list' ? (
+              <>
                 <input
-                  className="wcm-lib-input"
-                  placeholder="Exercise name *"
-                  value={newEx.name}
-                  onChange={e => setNewEx(p => ({ ...p, name: e.target.value }))}
+                  className="wcm-lib-search"
+                  placeholder="Search by name or category..."
+                  value={libSearch}
+                  onChange={e => setLibSearch(e.target.value)}
                 />
-                <input
-                  className="wcm-lib-input"
-                  placeholder="Category (e.g. Chest)"
-                  value={newEx.category}
-                  onChange={e => setNewEx(p => ({ ...p, category: e.target.value }))}
-                />
-                <div className="wcm-new-ex-actions">
-                  <button
-                    className="wcm-btn-secondary"
-                    onClick={() => setNewEx({ show: false, name: '', category: '' })}
-                  >
-                    Cancel
-                  </button>
-                  <button className="wcm-btn-save" onClick={handleCreateExercise}>Add</button>
+                <div className="wcm-lib-list">
+                  {filteredExercises.map(ex => (
+                    <div key={ex.id} className="wcm-lib-item">
+                      <div className="wcm-lib-info">
+                        <span className="wcm-lib-name">{ex.name}</span>
+                        <span className="wcm-lib-cat">{ex.category || ex.type || ''}</span>
+                      </div>
+                    </div>
+                  ))}
+                  {filteredExercises.length === 0 && (
+                    <div className="wcm-lib-empty">No exercises found</div>
+                  )}
                 </div>
-              </div>
+                <button
+                  className="wcm-btn-create-ex"
+                  onClick={() => setLibView('creator')}
+                >
+                  + Create New Exercise
+                </button>
+              </>
             ) : (
-              <button
-                className="wcm-btn-create-ex"
-                onClick={() => setNewEx(p => ({ ...p, show: true }))}
-              >
-                + Create New Exercise
-              </button>
+              <div className="wcm-lib-creator-scroll">
+                <ExerciseCreatorForm
+                  exercises={exercises}
+                  onSave={handleExerciseSaved}
+                  onCancel={() => setLibView('list')}
+                />
+              </div>
             )}
           </div>
         </div>

@@ -1,0 +1,108 @@
+Description:
+This story enables the RepIt User to create and configure an Exercise with structured parameters that can be used within workouts.
+
+User:
+RepIt User
+
+Benefit Hypothesis:
+As a RepIt User, I would like to create and configure exercises so that I can build structured and personalized workouts.
+
+Acceptance Criteria:
+
+I will be satisfied when:
+
+I will be satisfied when:
+
+The RepIt User can create an Exercise in the Exercise Creator that lives in the Exercise Library
+
+The RepIt User can configure the following Exercise fields
+
+Name
+
+Name is a Required Field
+
+Name is entered as a free text field
+
+Exercises cannot share the same name
+
+Type
+
+Type is a required field
+
+Type has the following values for the RepIt User to choose:
+
+Cardio
+
+Stretch
+
+Lift
+
+Custom
+
+Custom allows the user to enter the Exercise Type via free text
+
+Custom input must not be empty
+
+Sets
+
+Sets is a required field
+
+Sets has the following values:
+
+Number
+
+Failure
+
+If Number is selected, the user can enter an integer value
+
+Sets value must be a valid positive integer when Number is selected
+
+Reps
+
+Reps is a required field
+
+Reps has the following values:
+
+Number
+
+Time (minutes and seconds)
+
+Failure
+
+If Number is selected, the user can enter an integer value
+
+If Time is selected, the user can enter minutes and seconds
+
+Reps value must be valid based on selected type
+
+Weight
+
+Weight is an optional field
+
+Weight can be entered as an integer value by the user
+
+Weight must be a valid positive integer if entered
+
+Super Set
+
+Super Set is an optional field
+
+The RepIt User can link an existing exercise
+
+OR create a new exercise as part of the Super Set
+
+Super Set exercises follow the same parameter structure
+
+The RepIt User can review Exercise details before saving
+
+The RepIt User can edit Exercise details before saving
+
+The RepIt User can save the Exercise
+
+Saved Exercises are available for selection in Workout Creation
+
+Exercise data persists across sessions
+
+Required fields must be completed before saving
+
+Invalid inputs display appropriate error messages

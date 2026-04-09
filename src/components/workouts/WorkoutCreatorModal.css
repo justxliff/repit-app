@@ -532,6 +532,35 @@
   flex-shrink: 0;
 }
 
+.wcm-lib-back {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0;
+  transition: color 0.15s;
+}
+
+.wcm-lib-back:hover {
+  color: #f0f0f0;
+}
+
+.wcm-lib-creator-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1.25rem 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: #333 transparent;
+}
+
+.wcm-lib-creator-scroll::-webkit-scrollbar { width: 4px; }
+.wcm-lib-creator-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
 /* Mobile */
 @media (max-width: 640px) {
   .wcm-modal {

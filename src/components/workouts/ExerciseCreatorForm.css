@@ -1,0 +1,303 @@
+.ecf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 0.5rem 0 0;
+}
+
+.ecf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ecf-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ecf-req {
+  color: #ff5722;
+  margin-left: 2px;
+}
+
+.ecf-optional {
+  color: #555;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.68rem;
+}
+
+.ecf-input {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #f0f0f0;
+  font-size: 0.88rem;
+  font-family: inherit;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.ecf-input::placeholder { color: #444; }
+.ecf-input:focus { border-color: #ff5722; }
+.ecf-error-input { border-color: #e53935 !important; }
+
+.ecf-error-msg {
+  font-size: 0.72rem;
+  color: #e53935;
+}
+
+.ecf-error-offset {
+  margin-top: -0.4rem;
+}
+
+.ecf-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ecf-input-row .ecf-input {
+  flex: 1;
+}
+
+.ecf-unit {
+  font-size: 0.78rem;
+  color: #666;
+  flex-shrink: 0;
+}
+
+/* Pills */
+.ecf-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ecf-pill {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #888;
+  font-size: 0.78rem;
+  font-family: inherit;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ecf-pill:hover {
+  border-color: #555;
+  color: #d0d0d0;
+}
+
+.ecf-pill.active {
+  background: rgba(255, 87, 34, 0.12);
+  border-color: #ff5722;
+  color: #ff5722;
+  font-weight: 600;
+}
+
+/* Time row */
+.ecf-time-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ecf-time-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.ecf-time-input {
+  text-align: center;
+}
+
+.ecf-time-unit {
+  font-size: 0.75rem;
+  color: #666;
+  flex-shrink: 0;
+}
+
+/* Select */
+.ecf-select {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #c0c0c0;
+  font-size: 0.88rem;
+  font-family: inherit;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.ecf-select:focus { border-color: #ff5722; }
+
+/* Toggle */
+.ecf-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ecf-toggle {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  color: #555;
+  font-size: 0.72rem;
+  font-family: inherit;
+  padding: 0.25rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ecf-toggle.on {
+  background: rgba(255, 87, 34, 0.12);
+  border-color: #ff5722;
+  color: #ff5722;
+}
+
+/* Super set block */
+.ecf-superset-block {
+  background: #141414;
+  border: 1px solid #242424;
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.ecf-ss-divider {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ff5722;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-top: 1px solid #222;
+  padding-top: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.ecf-ss-new-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+/* Actions */
+.ecf-form-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.ecf-btn-primary {
+  flex: 1;
+  background: #ff5722;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ecf-btn-primary:hover { background: #e64a19; }
+
+.ecf-btn-secondary {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #888;
+  font-size: 0.88rem;
+  font-family: inherit;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ecf-btn-secondary:hover {
+  border-color: #555;
+  color: #d0d0d0;
+}
+
+/* Review screen */
+.ecf-review {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.ecf-review-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  border-bottom: 1px solid #222;
+  padding-bottom: 0.6rem;
+}
+
+.ecf-review-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.ecf-review-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #ff5722;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.3rem;
+}
+
+.ecf-review-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.ecf-review-label {
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.ecf-review-value {
+  font-size: 0.82rem;
+  color: #d0d0d0;
+  font-weight: 500;
+  text-align: right;
+}
+
+.ecf-review-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+.ecf-review-actions .ecf-btn-primary,
+.ecf-review-actions .ecf-btn-secondary {
+  flex: 1;
+}
