@@ -532,6 +532,83 @@
   flex-shrink: 0;
 }
 
+.wcm-lib-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.wcm-lib-item:hover .wcm-lib-actions {
+  opacity: 1;
+}
+
+.wcm-lib-action-btn {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, background 0.15s;
+}
+
+.wcm-lib-action-btn:hover {
+  color: #d0d0d0;
+  background: #2a2a2a;
+}
+
+.wcm-lib-delete-btn:hover {
+  color: #e53935;
+  background: rgba(229, 57, 53, 0.1);
+}
+
+.wcm-lib-confirm {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.wcm-lib-confirm-text {
+  font-size: 0.72rem;
+  color: #888;
+}
+
+.wcm-lib-confirm-yes {
+  background: #e53935;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 0.7rem;
+  font-family: inherit;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.wcm-lib-confirm-yes:hover { background: #c62828; }
+
+.wcm-lib-confirm-no {
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 5px;
+  color: #888;
+  font-size: 0.7rem;
+  font-family: inherit;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.wcm-lib-confirm-no:hover {
+  border-color: #555;
+  color: #d0d0d0;
+}
+
 .wcm-lib-back {
   background: none;
   border: none;

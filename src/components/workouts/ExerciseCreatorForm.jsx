@@ -16,6 +16,41 @@ const emptyForm = () => ({
   weight: '',
 })
 
+const exerciseToForm = (ex) => {
+  const known = ['Cardio', 'Stretch', 'Lift']
+  const isKnown = known.includes(ex.type)
+
+  let setsMode = 'Number', setsValue = ''
+  if (ex.sets === 'Failure') { setsMode = 'Failure' }
+  else if (ex.sets !== undefined && ex.sets !== null) { setsValue = String(ex.sets) }
+
+  let repsMode = 'Number', repsNumber = '', repsMins = '', repsSecs = ''
+  if (ex.reps === 'Failure') {
+    repsMode = 'Failure'
+  } else if (typeof ex.reps === 'string' && ex.reps.includes('m')) {
+    repsMode = 'Time'
+    const mM = ex.reps.match(/(\d+)m/)
+    const sM = ex.reps.match(/(\d+)s/)
+    repsMins = mM ? mM[1] : '0'
+    repsSecs = sM ? sM[1] : '0'
+  } else if (ex.reps !== undefined && ex.reps !== null) {
+    repsNumber = String(ex.reps)
+  }
+
+  return {
+    name: ex.name || '',
+    type: isKnown ? ex.type : 'Custom',
+    customType: isKnown ? '' : (ex.type || ''),
+    setsMode,
+    setsValue,
+    repsMode,
+    repsNumber,
+    repsMins,
+    repsSecs,
+    weight: ex.weight ? String(ex.weight) : '',
+  }
+}
+
 function Pill({ options, value, onChange }) {
   return (
     <div className="ecf-pills">
@@ -177,9 +212,9 @@ function ReviewRow({ label, value }) {
   )
 }
 
-export default function ExerciseCreatorForm({ onSave, onCancel, exercises = [], allowSuperSet = true }) {
+export default function ExerciseCreatorForm({ onSave, onCancel, exercises = [], allowSuperSet = true, initialValues = null, editId = null }) {
   const [view, setView]       = useState('form')
-  const [form, setForm]       = useState(emptyForm())
+  const [form, setForm]       = useState(initialValues ? exerciseToForm(initialValues) : emptyForm())
   const [errors, setErrors]   = useState({})
   const [hasSuperSet, setHasSuperSet] = useState(false)
   const [ssType, setSsType]   = useState('existing')
@@ -188,7 +223,7 @@ export default function ExerciseCreatorForm({ onSave, onCancel, exercises = [], 
   const [ssErrors, setSsErrors] = useState({})
 
   const nameExists = (name) =>
-    exercises.some(ex => ex.name.trim().toLowerCase() === name.trim().toLowerCase())
+    exercises.some(ex => ex.name.trim().toLowerCase() === name.trim().toLowerCase() && ex.id !== editId)
 
   const ssNameExists = (name) =>
     nameExists(name) || name.trim().toLowerCase() === form.name.trim().toLowerCase()

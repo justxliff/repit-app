@@ -46,5 +46,21 @@ export default function useExerciseLibrary() {
     return newEx
   }
 
-  return { exercises, addExercise, nameExists }
+  const updateExercise = (id, exercise) => {
+    setExercises(prev => {
+      const updated = prev.map(ex => ex.id === id ? { ...ex, ...exercise, id } : ex)
+      localStorage.setItem('repit_exercises', JSON.stringify(updated))
+      return updated
+    })
+  }
+
+  const deleteExercise = (id) => {
+    setExercises(prev => {
+      const updated = prev.filter(ex => ex.id !== id)
+      localStorage.setItem('repit_exercises', JSON.stringify(updated))
+      return updated
+    })
+  }
+
+  return { exercises, addExercise, updateExercise, deleteExercise, nameExists }
 }

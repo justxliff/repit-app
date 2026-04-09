@@ -31,15 +31,17 @@ const BackIcon = () => (
 )
 
 export default function WorkoutCreatorModal({ onClose, onSave }) {
-  const { exercises, addExercise, nameExists } = useExerciseLibrary()
+  const { exercises, addExercise, updateExercise, deleteExercise, nameExists } = useExerciseLibrary()
 
-  const [workoutName, setWorkoutName] = useState('')
-  const [sections, setSections]       = useState({ warmUp: [], workout: [], coolDown: [] })
-  const [showLibrary, setShowLibrary] = useState(false)
-  const [libView, setLibView]         = useState('list')
-  const [libSearch, setLibSearch]     = useState('')
-  const [errors, setErrors]           = useState({})
-  const [showReview, setShowReview]   = useState(false)
+  const [workoutName, setWorkoutName]     = useState('')
+  const [sections, setSections]           = useState({ warmUp: [], workout: [], coolDown: [] })
+  const [showLibrary, setShowLibrary]     = useState(false)
+  const [libView, setLibView]             = useState('list')
+  const [libSearch, setLibSearch]         = useState('')
+  const [editingExercise, setEditingExercise] = useState(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
+  const [errors, setErrors]               = useState({})
+  const [showReview, setShowReview]       = useState(false)
 
   const totalExercises = Object.values(sections).flat().length
 
@@ -78,8 +80,30 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
   const handleSave   = () => { onSave({ name: workoutName.trim(), sections }); onClose() }
 
   const handleExerciseSaved = (exerciseData) => {
-    addExercise(exerciseData)
+    if (editingExercise) {
+      updateExercise(editingExercise.id, exerciseData)
+    } else {
+      addExercise(exerciseData)
+    }
+    setEditingExercise(null)
     setLibView('list')
+  }
+
+  const handleEditExercise = (ex) => {
+    setEditingExercise(ex)
+    setConfirmDeleteId(null)
+    setLibView('edit')
+  }
+
+  const handleDeleteExercise = (id) => {
+    deleteExercise(id)
+    setConfirmDeleteId(null)
+  }
+
+  const goBackToList = () => {
+    setLibView('list')
+    setEditingExercise(null)
+    setConfirmDeleteId(null)
   }
 
   const filteredExercises = exercises.filter(ex =>
@@ -87,7 +111,13 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
     (ex.category || '').toLowerCase().includes(libSearch.toLowerCase())
   )
 
-  const closeLibrary = () => { setShowLibrary(false); setLibView('list'); setLibSearch('') }
+  const closeLibrary = () => {
+    setShowLibrary(false)
+    setLibView('list')
+    setLibSearch('')
+    setEditingExercise(null)
+    setConfirmDeleteId(null)
+  }
 
   if (showReview) {
     return (
@@ -230,20 +260,20 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
           <div className="wcm-lib-panel" onClick={e => e.stopPropagation()}>
 
             <div className="wcm-lib-header">
-              {libView === 'creator' ? (
-                <button className="wcm-lib-back" onClick={() => setLibView('list')}>
+              {(libView === 'creator' || libView === 'edit') && (
+                <button className="wcm-lib-back" onClick={goBackToList}>
                   <BackIcon /> Back
                 </button>
-              ) : null}
+              )}
               <h3 className="wcm-lib-title">
-                {libView === 'creator' ? 'New Exercise' : 'Exercise Library'}
+                {libView === 'creator' ? 'New Exercise' : libView === 'edit' ? 'Edit Exercise' : 'Exercise Library'}
               </h3>
               <button className="wcm-close" onClick={closeLibrary} aria-label="Close library">
                 <CloseIcon size={18} />
               </button>
             </div>
 
-            {libView === 'list' ? (
+            {libView === 'list' && (
               <>
                 <input
                   className="wcm-lib-search"
@@ -258,25 +288,60 @@ export default function WorkoutCreatorModal({ onClose, onSave }) {
                         <span className="wcm-lib-name">{ex.name}</span>
                         <span className="wcm-lib-cat">{ex.category || ex.type || ''}</span>
                       </div>
+                      {confirmDeleteId === ex.id ? (
+                        <div className="wcm-lib-confirm">
+                          <span className="wcm-lib-confirm-text">Delete?</span>
+                          <button className="wcm-lib-confirm-yes" onClick={() => handleDeleteExercise(ex.id)}>Yes</button>
+                          <button className="wcm-lib-confirm-no" onClick={() => setConfirmDeleteId(null)}>No</button>
+                        </div>
+                      ) : (
+                        <div className="wcm-lib-actions">
+                          <button
+                            className="wcm-lib-action-btn"
+                            onClick={() => handleEditExercise(ex)}
+                            aria-label="Edit exercise"
+                            title="Edit"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                          </button>
+                          <button
+                            className="wcm-lib-action-btn wcm-lib-delete-btn"
+                            onClick={() => setConfirmDeleteId(ex.id)}
+                            aria-label="Delete exercise"
+                            title="Delete"
+                          >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="3 6 5 6 21 6" />
+                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                              <path d="M10 11v6M14 11v6" />
+                              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                            </svg>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))}
                   {filteredExercises.length === 0 && (
                     <div className="wcm-lib-empty">No exercises found</div>
                   )}
                 </div>
-                <button
-                  className="wcm-btn-create-ex"
-                  onClick={() => setLibView('creator')}
-                >
+                <button className="wcm-btn-create-ex" onClick={() => setLibView('creator')}>
                   + Create New Exercise
                 </button>
               </>
-            ) : (
+            )}
+
+            {(libView === 'creator' || libView === 'edit') && (
               <div className="wcm-lib-creator-scroll">
                 <ExerciseCreatorForm
                   exercises={exercises}
                   onSave={handleExerciseSaved}
-                  onCancel={() => setLibView('list')}
+                  onCancel={goBackToList}
+                  initialValues={libView === 'edit' ? editingExercise : null}
+                  editId={libView === 'edit' ? editingExercise?.id : null}
                 />
               </div>
             )}
