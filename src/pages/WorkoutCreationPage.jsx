@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useAuth } from '../context/AuthContext'
+import useWorkouts from '../hooks/useWorkouts'
 import WorkoutCreatorModal from '../components/workouts/WorkoutCreatorModal'
 import WorkoutGeneratorModal from '../components/workouts/WorkoutGeneratorModal'
 import './WorkoutCreationPage.css'
@@ -27,7 +29,9 @@ const GeneratorIcon = () => (
   </div>
 )
 
-export default function WorkoutCreationPage({ workouts = [] }) {
+export default function WorkoutCreationPage() {
+  const { user } = useAuth()
+  const { workouts, saveWorkout } = useWorkouts(user?.email)
   const [activeModal, setActiveModal] = useState(null)
 
   return (
@@ -38,18 +42,12 @@ export default function WorkoutCreationPage({ workouts = [] }) {
 
       <div className="wc-body">
         <div className="wc-tiles">
-          <button
-            className="wc-tile"
-            onClick={() => setActiveModal('creator')}
-          >
+          <button className="wc-tile" onClick={() => setActiveModal('creator')}>
             <CreatorIcon />
             <span className="wc-tile-label">Workout Creator</span>
           </button>
 
-          <button
-            className="wc-tile"
-            onClick={() => setActiveModal('generator')}
-          >
+          <button className="wc-tile" onClick={() => setActiveModal('generator')}>
             <GeneratorIcon />
             <span className="wc-tile-label">Workout Generator</span>
           </button>
@@ -62,10 +60,14 @@ export default function WorkoutCreationPage({ workouts = [] }) {
                 <span>Get started with a new workout</span>
               </div>
             ) : (
-              workouts.map((w, i) => (
-                <div key={i} className="wc-workout-tile">
+              workouts.map(w => (
+                <div key={w.id} className="wc-workout-tile">
                   <div className="wc-workout-name">{w.name}</div>
-                  <div className="wc-workout-meta">{w.date} · {w.duration}m</div>
+                  <div className="wc-workout-meta">{w.date}</div>
+                  <div className="wc-workout-count">
+                    {Object.values(w.sections || {}).flat().length} exercise
+                    {Object.values(w.sections || {}).flat().length !== 1 ? 's' : ''}
+                  </div>
                 </div>
               ))
             )}
@@ -74,7 +76,13 @@ export default function WorkoutCreationPage({ workouts = [] }) {
       </div>
 
       {activeModal === 'creator' && (
-        <WorkoutCreatorModal onClose={() => setActiveModal(null)} />
+        <WorkoutCreatorModal
+          onClose={() => setActiveModal(null)}
+          onSave={(workout) => {
+            saveWorkout(workout)
+            setActiveModal(null)
+          }}
+        />
       )}
       {activeModal === 'generator' && (
         <WorkoutGeneratorModal onClose={() => setActiveModal(null)} />

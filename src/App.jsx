@@ -194,7 +194,7 @@ export default function App() {
         )}
 
         {activeTab === 'workouts' && (
-          <WorkoutCreationPage workouts={[]} />
+          <WorkoutCreationPage />
         )}
 
         {activeTab === 'exercises' && (
