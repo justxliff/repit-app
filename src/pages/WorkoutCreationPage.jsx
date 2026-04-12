@@ -48,37 +48,14 @@ const GeneratorIcon = () => (
   </div>
 )
 
-const EditIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-  </svg>
-)
-
-const TrashIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="3 6 5 6 21 6" />
-    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-    <path d="M10 11v6M14 11v6" />
-    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-  </svg>
-)
-
 export default function WorkoutCreationPage() {
   const { user } = useAuth()
   const { workouts, saveWorkout, updateWorkout } = useWorkouts(user?.email)
-  const { exercises, addExercise, updateExercise, deleteExercise, nameExists } = useExerciseLibrary()
+  const { exercises, addExercise, updateExercise } = useExerciseLibrary()
 
   const [activeModal, setActiveModal] = useState(null)
   const [editingWorkout, setEditingWorkout] = useState(null)
   const [editingExercise, setEditingExercise] = useState(null)
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null)
-  const [exSearch, setExSearch] = useState('')
-
-  const filteredExercises = exercises.filter(ex =>
-    ex.name.toLowerCase().includes(exSearch.toLowerCase()) ||
-    (ex.category || '').toLowerCase().includes(exSearch.toLowerCase())
-  )
 
   function handleExerciseSave(data) {
     if (editingExercise) {
@@ -88,11 +65,6 @@ export default function WorkoutCreationPage() {
     }
     setEditingExercise(null)
     setActiveModal(null)
-  }
-
-  function handleDeleteExercise(id) {
-    deleteExercise(id)
-    setConfirmDeleteId(null)
   }
 
   return (
@@ -150,63 +122,39 @@ export default function WorkoutCreationPage() {
         </div>
 
         {/* Exercise Library Panel */}
-        <div className="wc-panel-wrap wc-ex-panel">
+        <div className="wc-panel-wrap">
           <div className="wc-panel-header">
             <span className="wc-panel-label">Exercise Library</span>
             <span className="wc-panel-count">{exercises.length}</span>
           </div>
-          <div className="wc-ex-search-row">
-            <input
-              className="wc-ex-search"
-              placeholder="Search exercises..."
-              value={exSearch}
-              onChange={e => setExSearch(e.target.value)}
-            />
+          <div className="wc-shelf">
+            <button
+              className="wc-ex-create-tile"
+              onClick={() => { setEditingExercise(null); setActiveModal('exercise') }}
+            >
+              <div className="wc-ex-create-tile-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </div>
+              <span className="wc-ex-create-tile-label">New Exercise</span>
+            </button>
+
+            {exercises.map(ex => (
+              <button
+                key={ex.id}
+                className="wc-workout-tile"
+                onClick={() => { setEditingExercise(ex); setActiveModal('exercise') }}
+              >
+                <div className="wc-workout-name">{ex.name}</div>
+                <div className="wc-workout-meta">{ex.category || ex.type || ''}</div>
+                {ex.muscles && (
+                  <div className="wc-workout-count">{ex.muscles}</div>
+                )}
+              </button>
+            ))}
           </div>
-          <div className="wc-ex-list">
-            {filteredExercises.length === 0 ? (
-              <div className="wc-ex-empty">No exercises found</div>
-            ) : (
-              filteredExercises.map(ex => (
-                <div key={ex.id} className="wc-ex-item">
-                  <div className="wc-ex-info">
-                    <span className="wc-ex-name">{ex.name}</span>
-                    <span className="wc-ex-cat">{ex.category || ex.type || ''}</span>
-                  </div>
-                  {confirmDeleteId === ex.id ? (
-                    <div className="wc-ex-confirm">
-                      <span className="wc-ex-confirm-text">Delete?</span>
-                      <button className="wc-ex-confirm-yes" onClick={() => handleDeleteExercise(ex.id)}>Yes</button>
-                      <button className="wc-ex-confirm-no" onClick={() => setConfirmDeleteId(null)}>No</button>
-                    </div>
-                  ) : (
-                    <div className="wc-ex-actions">
-                      <button
-                        className="wc-ex-action-btn"
-                        onClick={() => { setEditingExercise(ex); setActiveModal('exercise') }}
-                        aria-label="Edit exercise"
-                      >
-                        <EditIcon />
-                      </button>
-                      <button
-                        className="wc-ex-action-btn wc-ex-delete-btn"
-                        onClick={() => setConfirmDeleteId(ex.id)}
-                        aria-label="Delete exercise"
-                      >
-                        <TrashIcon />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))
-            )}
-          </div>
-          <button
-            className="wc-ex-create-btn"
-            onClick={() => { setEditingExercise(null); setActiveModal('exercise') }}
-          >
-            + Create New Exercise
-          </button>
         </div>
       </div>
 
