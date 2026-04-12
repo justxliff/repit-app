@@ -298,6 +298,24 @@
   color: #555;
 }
 
+/* Editable workout name in review header */
+.wgm-name-input {
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #f0f0f0;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 0.45rem 0.75rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.wgm-name-input::placeholder { color: #444; }
+.wgm-name-input:focus { border-color: #ff5722; }
+
 /* Review */
 .wgm-review {
   display: flex;
@@ -394,6 +412,30 @@
 
 .wgm-review-field input:focus {
   border-color: #ff5722;
+}
+
+/* Delete exercise button */
+.wgm-delete-btn {
+  background: none;
+  border: none;
+  color: #444;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: color 0.15s, background 0.15s, opacity 0.15s;
+}
+
+.wgm-review-row:hover .wgm-delete-btn {
+  opacity: 1;
+}
+
+.wgm-delete-btn:hover {
+  color: #e53935;
+  background: rgba(229, 57, 53, 0.1);
 }
 
 /* Add to library */

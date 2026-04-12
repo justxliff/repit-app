@@ -139,6 +139,7 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
   const [error, setError] = useState('')
   const [generatedWorkout, setGeneratedWorkout] = useState(null)
   const [editedSections, setEditedSections] = useState(null)
+  const [workoutName, setWorkoutName] = useState('')
   const [addedToLibrary, setAddedToLibrary] = useState(false)
 
   const profileHasPrefs = profile?.preferences?.goal && profile?.preferences?.focus
@@ -195,6 +196,7 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
 
       setGeneratedWorkout(parsed)
       setEditedSections(JSON.parse(JSON.stringify(parsed.sections)))
+      setWorkoutName(parsed.name)
       setStatus('review')
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
@@ -212,9 +214,17 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
     })
   }
 
+  function deleteEntry(sectionKey, index) {
+    setEditedSections(prev => {
+      const updated = { ...prev }
+      updated[sectionKey] = prev[sectionKey].filter((_, i) => i !== index)
+      return updated
+    })
+  }
+
   function handleSave() {
     const workout = {
-      name: generatedWorkout.name,
+      name: workoutName.trim() || generatedWorkout.name,
       sections: editedSections,
     }
     onSave(workout)
@@ -247,9 +257,16 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
       <div className="wgm-modal" onClick={e => e.stopPropagation()}>
         <div className="wgm-header">
           <div className="wgm-header-left">
-            <h2 className="wgm-title">
-              {status === 'review' ? generatedWorkout?.name : 'Workout Generator'}
-            </h2>
+            {status === 'review' ? (
+              <input
+                className="wgm-name-input"
+                value={workoutName}
+                onChange={e => setWorkoutName(e.target.value)}
+                placeholder="Workout name"
+              />
+            ) : (
+              <h2 className="wgm-title">Workout Generator</h2>
+            )}
             {status === 'idle' || status === 'error' ? (
               <StepIndicator step={step} />
             ) : null}
@@ -430,6 +447,16 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
                             />
                           </label>
                         </div>
+                        <button
+                          className="wgm-delete-btn"
+                          onClick={() => deleteEntry(sec.key, i)}
+                          aria-label="Remove exercise"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -463,6 +490,7 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
                   setStep(4)
                   setGeneratedWorkout(null)
                   setEditedSections(null)
+                  setWorkoutName('')
                   setAddedToLibrary(false)
                 }}
               >
