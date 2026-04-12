@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import useWorkouts from '../hooks/useWorkouts'
 import WorkoutCreatorModal from '../components/workouts/WorkoutCreatorModal'
 import WorkoutGeneratorModal from '../components/workouts/WorkoutGeneratorModal'
+import WorkoutEditorModal from '../components/workouts/WorkoutEditorModal'
 import './WorkoutCreationPage.css'
 
 const CreatorIcon = () => (
@@ -31,8 +32,9 @@ const GeneratorIcon = () => (
 
 export default function WorkoutCreationPage() {
   const { user } = useAuth()
-  const { workouts, saveWorkout } = useWorkouts(user?.email)
+  const { workouts, saveWorkout, updateWorkout } = useWorkouts(user?.email)
   const [activeModal, setActiveModal] = useState(null)
+  const [editingWorkout, setEditingWorkout] = useState(null)
 
   return (
     <div className="wc-page">
@@ -61,14 +63,18 @@ export default function WorkoutCreationPage() {
               </div>
             ) : (
               workouts.map(w => (
-                <div key={w.id} className="wc-workout-tile">
+                <button
+                  key={w.id}
+                  className="wc-workout-tile"
+                  onClick={() => setEditingWorkout(w)}
+                >
                   <div className="wc-workout-name">{w.name}</div>
                   <div className="wc-workout-meta">{w.date}</div>
                   <div className="wc-workout-count">
                     {Object.values(w.sections || {}).flat().length} exercise
                     {Object.values(w.sections || {}).flat().length !== 1 ? 's' : ''}
                   </div>
-                </div>
+                </button>
               ))
             )}
           </div>
@@ -92,6 +98,16 @@ export default function WorkoutCreationPage() {
             setActiveModal(null)
           }}
           userEmail={user?.email}
+        />
+      )}
+      {editingWorkout && (
+        <WorkoutEditorModal
+          workout={editingWorkout}
+          onClose={() => setEditingWorkout(null)}
+          onSave={(changes) => {
+            updateWorkout(editingWorkout.id, changes)
+            setEditingWorkout(null)
+          }}
         />
       )}
     </div>

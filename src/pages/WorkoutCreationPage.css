@@ -155,6 +155,9 @@
   flex-direction: column;
   gap: 0.4rem;
   transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
 }
 
 .wc-workout-tile:hover {

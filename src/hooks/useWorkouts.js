@@ -22,5 +22,13 @@ export default function useWorkouts(email) {
     })
   }
 
-  return { workouts, saveWorkout }
+  const updateWorkout = (id, changes) => {
+    setWorkouts(prev => {
+      const updated = prev.map(w => w.id === id ? { ...w, ...changes } : w)
+      localStorage.setItem(`repit_workouts_${email}`, JSON.stringify(updated))
+      return updated
+    })
+  }
+
+  return { workouts, saveWorkout, updateWorkout }
 }
