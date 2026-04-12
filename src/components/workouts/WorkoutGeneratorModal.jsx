@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import OpenAI from 'openai'
 import useExerciseLibrary from '../../hooks/useExerciseLibrary'
 import { useProfileData } from '../../hooks/useProfileData'
 import './WorkoutGeneratorModal.css'
@@ -166,12 +165,6 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
     setError('')
 
     try {
-      const client = new OpenAI({
-        apiKey: import.meta.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-        baseURL: import.meta.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-        dangerouslyAllowBrowser: true,
-      })
-
       const prompt = buildPrompt({
         goal: activeGoal,
         focus: activeFocus,
@@ -181,13 +174,19 @@ export default function WorkoutGeneratorModal({ onClose, onSave, userEmail }) {
         libraryExercises,
       })
 
-      const response = await client.chat.completions.create({
-        model: 'gpt-5.1',
-        messages: [{ role: 'user', content: prompt }],
-        max_completion_tokens: 8192,
+      const res = await fetch('/api/generate-workout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
       })
 
-      const raw = response.choices[0]?.message?.content || ''
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || `Request failed (${res.status})`)
+      }
+
+      const raw = data.choices?.[0]?.message?.content || ''
       const jsonMatch = raw.match(/\{[\s\S]*\}/)
       if (!jsonMatch) throw new Error('No valid JSON returned from AI.')
 
