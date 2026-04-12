@@ -8,4 +8,8 @@ export default defineConfig({
     port: 5000,
     allowedHosts: true,
   },
+  define: {
+    'import.meta.env.AI_INTEGRATIONS_OPENAI_BASE_URL': JSON.stringify(process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || ''),
+    'import.meta.env.AI_INTEGRATIONS_OPENAI_API_KEY': JSON.stringify(process.env.AI_INTEGRATIONS_OPENAI_API_KEY || ''),
+  },
 })

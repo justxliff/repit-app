@@ -85,7 +85,14 @@ export default function WorkoutCreationPage() {
         />
       )}
       {activeModal === 'generator' && (
-        <WorkoutGeneratorModal onClose={() => setActiveModal(null)} />
+        <WorkoutGeneratorModal
+          onClose={() => setActiveModal(null)}
+          onSave={(workout) => {
+            saveWorkout(workout)
+            setActiveModal(null)
+          }}
+          userEmail={user?.email}
+        />
       )}
     </div>
   )
