@@ -1,0 +1,78 @@
+Description:
+This user story allows the user to have a workout generated for them based off of their Workout Preferences, Focus, and Muscle group.
+
+User:
+RepIt User
+
+Benefit Hypothesis:
+As a RepIt user, I would like to generate a workout automatically so that I can easily have a workout to plan.
+
+Acceptance Criteria:
+
+I will be satisfied when:
+
+The Workout Generator contains a guided for that takes the following parameters one at a time:
+
+Workout Preferences
+
+The user confirms if they want to use their default profile Workout Preferences, if they select yes  the defaults are used, if they select no, they are prompted to select their preferences for this workout, based off the same profile Workout Preferences (Workout Goal, Focus)
+
+Experience Level
+
+The user confirms their experience level on a scale of 1-5, with one corresponding to Highly Untrained and 5 being Highly Trained
+
+Equipment Available 
+
+The user can multi-select from the following list of what equipment is available to them for their workout
+
+Free Weights
+
+Cable Machine
+
+Lifting Machines
+
+Body Weight
+
+Dumbell
+
+Barbell
+
+Advanced Gym Equipment (Hack Squat, Hex Bar, etc.)
+
+All the Above
+
+Muscle Group
+
+The user can multi-select from the following Muscle Group Choices
+
+Chest
+
+Back
+
+Arms
+
+Legs
+
+Shoulders
+
+Core
+
+If the user's exercise library is not empty, the AI uses those exercises as context when generating the workout
+
+If the exercise library is empty, the AI generates freely using its own knowledge
+
+Pressing "Generate" sends the parameters to the AI and shows a loading state while the response is being processed
+
+The AI returns a workout structured into three sections: Warm-Up, Workout, and Cool Down — matching the existing workout data model
+
+The user can edit the existing exercises in the workout to adjust the reps, sets, weight, etc.
+
+The user is shown a review screen displaying the full generated workout before saving
+
+The user can save the workout directly to their workout list from the review screen
+
+The user can press "Regenerate" on the review screen to request a new workout with the same preferences
+
+If the exercise library was empty and the AI generated its own exercises, the user is offered the option to add those exercises to their library after saving
+
+Error states are handled gracefully (e.g. generation fails, network issue)
